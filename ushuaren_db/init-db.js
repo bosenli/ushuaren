@@ -18,5 +18,5 @@ db.homeCategories.updateOne(
     {$set: {name: "二手", description: "买卖二手"}}
 );
 
-// Log the updated documents
+// Log the updated documents!
 printjson(db.homeCategories.find().toArray());
