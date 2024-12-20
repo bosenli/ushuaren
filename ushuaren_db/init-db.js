@@ -1,3 +1,6 @@
+//email: ushuarencs@gmail.com
+//password: Signin2025
+
 // init-db.js
 db = db.getSiblingDB('ushuaren_dev');  // Explicitly select the database
 

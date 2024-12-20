@@ -1,3 +1,9 @@
+MERN stack: Mongodb, Express js, React Native
+Tech related: Web scraping, SEO
+
+API design : should be stateless RESTful API - each request contain all info necessary to process certain request, should not remember previous requests.
+
+
 MVC framework:
 
 Components of MVC:
@@ -33,5 +39,9 @@ Structure: In most setups, ushuaren_db might not be a separate component but rat
     - npm init
     - npm install express --save
     - npm install nodemon --save-dev
+    - npm i morgan  (a popular middleware to llow us to see request data right in the console, not saved because it is not dev dependency it is regular dependency )
     - npm start  -> it will start app.js from package.json
+    - npm i mongoose@5
+    - create server.js to set db connection info
+
 
