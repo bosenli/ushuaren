@@ -1,0 +1,35 @@
+{
+  "name": "ushuaren_api",
+  "version": "1.0.0",
+  "description": "ushuaren api for ushuaren app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bosenli/ushuaren.git"
+  },
+  "keywords": [
+    "huaren",
+    "huarenwang"
+  ],
+  "author": "bosen li",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/bosenli/ushuaren/issues"
+  },
+  "homepage": "https://github.com/bosenli/ushuaren#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0",
+    "mongoose": "^8.9.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
