@@ -47,5 +47,27 @@ Structure: In most setups, ushuaren_db might not be a separate component but rat
     - npm i mongoose@5
     - create server.js to set db connection info
     - npm i eslint prettier eslint-config-prettier eslint-plugin-prettier
+    - npm install validator
 
+Q & A:
+HOW TO KNOW WHICH COLLECTION SHOULD MONGODB WRITE TO?
+The line mongoose.model('Category', categorySchema) instructs Mongoose to create a model named Category which will interact with a MongoDB collection named categories. Mongoose automatically looks for the plural, lowercase form of your model name by default. Thus Category becomes categories.
 
+If you want to use a different collection name such as "category" instead of the default "categories," you can explicitly define it when you create the model.
+
+const categorySchema = new mongoose.Schema({
+name: {
+type: String,
+required: [true, 'A category must have a name'],
+unique: true
+},
+description: {
+type: String,
+default: ''
+},
+icon: {
+type: String
+}
+}, { collection: 'category' }); // Explicitly setting the collection name to 'category'
+
+const Category = mongoose.model('Category', categorySchema);

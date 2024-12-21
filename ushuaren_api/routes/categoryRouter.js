@@ -6,10 +6,13 @@ const categoryRouter = express.Router();
 //   console.log(`id is ${val}`);
 //   next();
 // });
-categoryRouter.param('id', categoryController.checkID);
+// categoryRouter.param('id', categoryController.checkID);
 
 // USER SEND REQUEST, THEN CONTROLLER HANDLE THE RESPONSE FROM DB AND RESPONSE BACK TO USER
-categoryRouter.route('/').get(categoryController.getAllCategories);
+categoryRouter
+  .route('/')
+  .get(categoryController.getAllCategories)
+  .post(categoryController.createCategory);
 
 categoryRouter
   .route('/:id')
