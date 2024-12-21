@@ -13,11 +13,22 @@ const Category = require('./../models/categoryModel');
 // };
 
 //GET METHOD : get category
-exports.getAllCategories = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: ' This route is not yet defined!',
-  });
+exports.getAllCategories = async (req, res) => {
+  try {
+    const categories = await Category.find();
+    res.status(200).json({
+      status: 'sccuess',
+      results: categories.length,
+      data: {
+        categories,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      stauts: 'fail',
+      message: err,
+    });
+  }
 };
 
 //POST METHOD : create new
@@ -39,22 +50,54 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-exports.getCategoriesById = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {},
-  });
+exports.getCategoriesById = async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        category,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
-exports.updateCategories = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: ' This route is not yet defined!',
-  });
+exports.updateCategories = async (req, res) => {
+  try {
+    const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: 'success',
+      data: {
+        category, // category： category in ES6, category can be shortened to only category as key value pair has the same name
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
-exports.deleteCategories = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: ' This route is not yet defined!',
-  });
+
+exports.deleteCategories = async (req, res) => {
+  try {
+     await Category.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'error',
+      message: err,
+    });
+  }
 };
