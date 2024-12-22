@@ -10,6 +10,13 @@ const categoryRouter = express.Router();
 
 // USER SEND REQUEST, THEN CONTROLLER HANDLE THE RESPONSE FROM DB AND RESPONSE BACK TO USER
 categoryRouter
+  .route('/top-5-cheap')
+  .get(
+    categoryController.aliasTopCategory,
+    categoryController.getAllCategories
+  );
+
+categoryRouter
   .route('/')
   .get(categoryController.getAllCategories)
   .post(categoryController.createCategory);

@@ -3,6 +3,7 @@ const validator = require('validator');
 
 const postSchema = new mongoose.Schema({
   type: {
+    //!!change type to category? if in rental screen will be rental category, if used category will be used...
     type: String,
     required: [true, 'A post must have a type'],
     enum: ['rental', 'used', 'job', 'trade', 'blog', 'restaurant'],
@@ -56,6 +57,7 @@ const postSchema = new mongoose.Schema({
     validate: [validator.isURL, 'Please provide valid URLs for images'],
   },
   location: {
+    //this is address where user can set at the real address or just fill some area
     type: String,
     required: [true, 'A post must have a location'],
   },

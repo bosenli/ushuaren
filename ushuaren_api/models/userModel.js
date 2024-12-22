@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin', 'superUser', 'developer', 'guest'], // Including various roles
+    enum: ['user', 'admin', 'super', 'developer', 'guest'], // Including various roles
     default: 'user',
   },
   // Other fields for authentication like password, etc., could be added here

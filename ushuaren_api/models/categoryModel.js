@@ -15,7 +15,7 @@ const categorySchema = new mongoose.Schema({
     type: String,
     validate: [validator.isURL, 'Please provide a valid URL'], // Uncommented and fixed validator for the icon
   },
-  type: {
+  category: {
     type: String,
     enum: [
       'rental',
@@ -33,6 +33,7 @@ const categorySchema = new mongoose.Schema({
       'medical', // 中西医，牙医
       'pets',
       'election',
+      'business sale',
     ], // Specifying possible category types
     required: [true, 'A category must have a type'],
   },
@@ -47,6 +48,12 @@ const categorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     immutable: true, // Prevent changes to this field once it's set
+    select: false, //hide create at in response
+  },
+  createdBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: [true, 'A post must be associated with a user'],
   },
 });
 

@@ -24,7 +24,7 @@ app.use(express.json()); //for post request to work properly
 
 // 2) ROUTE HANDLESERS (moved to controllers)
 
-//3) ROUTES (mount the routers. moved to routes folder)
+//3) ROUTES (mount the routers. moved to routes folder, mounted to 'categroy' routes)
 app.use('/api/v1/category', category);
 
 //4) START SERVER (moved to server.js file)
