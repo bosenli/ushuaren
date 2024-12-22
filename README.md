@@ -3,7 +3,6 @@ Tech related: Web scraping, SEO
 
 API design : should be stateless RESTful API - each request contain all info necessary to process certain request, should not remember previous requests.
 
-
 MVC framework:
 
 Components of MVC:
@@ -29,19 +28,46 @@ Role: If this is intended to be strictly related to the database operations or c
 Structure: In most setups, ushuaren_db might not be a separate component but rather integrated into ushuaren_api under the Models. However, if you choose to keep database scripts, backups, or raw data files separate, this could be organized under ushuaren_db. For typical web app projects, this directory isn't necessary unless it serves a specific purpose like storing database migration scripts or large datasets for seeding.
 
 # ushuaren
-## set up env
-# npx create-expo-app . --template blank
-# npm start  ( it will start from the set up on the script on package.json file)
-# scan qr code 
 
+## set up env
+
+# npx create-expo-app . --template blank
+
+# npm start ( it will start from the set up on the script on package.json file)
+
+# scan qr code
 
 ## api -
+
     - npm init
     - npm install express --save
-    - npm install nodemon --save-dev
-    - npm i morgan  (a popular middleware to llow us to see request data right in the console, not saved because it is not dev dependency it is regular dependency )
+    - npm install nodemon --save-dev or npm i nodemon --global
+    - npm i morgan  (a popular middleware to allow us to see request data right in the console, not saved because it is not dev dependency it is regular dependency )
     - npm start  -> it will start app.js from package.json
     - npm i mongoose@5
     - create server.js to set db connection info
+    - npm i eslint prettier eslint-config-prettier eslint-plugin-prettier
+    - npm install validator
 
+Q & A:
+HOW TO KNOW WHICH COLLECTION SHOULD MONGODB WRITE TO?
+The line mongoose.model('Category', categorySchema) instructs Mongoose to create a model named Category which will interact with a MongoDB collection named categories. Mongoose automatically looks for the plural, lowercase form of your model name by default. Thus Category becomes categories.
 
+If you want to use a different collection name such as "category" instead of the default "categories," you can explicitly define it when you create the model.
+
+const categorySchema = new mongoose.Schema({
+name: {
+type: String,
+required: [true, 'A category must have a name'],
+unique: true
+},
+description: {
+type: String,
+default: ''
+},
+icon: {
+type: String
+}
+}, { collection: 'category' }); // Explicitly setting the collection name to 'category'
+
+const Category = mongoose.model('Category', categorySchema);
