@@ -17,6 +17,10 @@ categoryRouter
   );
 
 categoryRouter
+  .route('/category-stats')
+  .get(categoryController.getCategoryStats);
+
+categoryRouter
   .route('/')
   .get(categoryController.getAllCategories)
   .post(categoryController.createCategory);
