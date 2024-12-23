@@ -1,5 +1,5 @@
 const Category = require('./../models/categoryModel');
-const APIFeatures = require('./../utils/apiFeatures');
+const APIFeatures = require('./../utils/apifeatures');
 //EXPORTS ALL HANDLERS FOR ROUTES which is to categoryRouter
 // exports.checkID = (req, res, next, val) => {
 //   console.log(`id in controller ${val}`);
@@ -184,7 +184,7 @@ exports.deleteCategories = async (req, res) => {
     });
   }
 };
-//section 102
+//section 102 : aggregation pipeline
 exports.getCategoryStats = async (req, res) => {
   try {
     const stats = await Category.aggregate([
@@ -231,6 +231,64 @@ exports.getCategoryStats = async (req, res) => {
       status: 'success',
       data: {
         stats,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
+//section 103: using stage 'unwind'
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1;
+    const plan = await Category.aggregate([
+      {
+        $unwind: '$startDates', //startDates is array of all days as example, unwind to individual dates
+      },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: '$startDates' }, //group them by the date, aggregatrion by operators in mongo documentation
+          numCategoryStarts: { $sum: 1 },
+          tours: {
+            $push: '$name', //field , make it into array
+          },
+        },
+      },
+      {
+        $addFields: {
+          month: '$_id',
+        },
+      },
+      {
+        $project: {
+          //give each field to 0 or 1
+          _id: 0,
+        },
+      },
+      {
+        $sort: {
+          numCategoryStarts: 1, // or -1 descending , 1 is ascending
+        },
+      },
+      {
+        $limit: 6, // 6 outputs as an example
+      },
+    ]);
+    res.stauts(200).json({
+      status: 'success',
+      data: {
+        plan,
       },
     });
   } catch (err) {
