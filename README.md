@@ -1,7 +1,7 @@
 MERN stack: Mongodb, Express js, React Native
 Tech related: Web scraping, SEO
 
-API design : should be stateless RESTful API - each request contain all info necessary to process certain request, should not remember previous requests.
+API design : should be stateless RESTful API - each request contain all info necessary to process certain request, should not remember previous requests; fat model , thin controller
 
 MVC framework:
 

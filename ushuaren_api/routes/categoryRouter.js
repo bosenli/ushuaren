@@ -20,6 +20,8 @@ categoryRouter
   .route('/category-stats')
   .get(categoryController.getCategoryStats);
 
+categoryRouter.route('/monthly-plan/:year').get(categoryController.getMonthlyPlan)
+
 categoryRouter
   .route('/')
   .get(categoryController.getAllCategories)
