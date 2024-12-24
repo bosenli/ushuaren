@@ -5,7 +5,7 @@ const Address = require('./addressModel'); // Assuming you have an Address model
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'A user must have a name'],
+    required: [true, 'please tell us your name'],
   },
   email: {
     type: String,
@@ -18,6 +18,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: [validator.isMobilePhone, 'Please provide a valid phone number'],
     default: null, // Phone is optional but if provided, must be valid
+  },
+  password: {
+    type: String,
+    default: null,
+    required: [true, 'Please provide a password'],
+    minlength: 8,
+  },
+  passwordConfrim: {
+    type: String,
+    required: [true, 'Please  confirm your password'],
+    default: null,
   },
   profileImage: {
     type: String,
