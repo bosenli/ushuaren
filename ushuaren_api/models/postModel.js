@@ -27,6 +27,14 @@ const postSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'A post must have a title'],
+    validate: {
+      validator: function (val) {
+        return val.length() < 0;
+        // this only points to current doc on NEW document creation
+        //return val < this.price
+      },
+      message: 'title ({VALUE}) can not be less than 0 length', //VALUE is accessing val
+    },
   },
   description: {
     type: String,
@@ -85,8 +93,8 @@ const postSchema = new mongoose.Schema({
   },
   ratingAverage: {
     type: Number,
-    min: [0, 'Rating must be between 0 and 5'],
-    max: [5, 'Rating must be between 0 and 5'],
+    min: [1, 'Rating must be between 0 and 5。0'],
+    max: [5, 'Rating must be between 0 and 5。0'],
     default: 0,
     required: function () {
       return this.type === 'restaurant';
