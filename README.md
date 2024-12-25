@@ -3,6 +3,8 @@ Tech related: Web scraping, SEO
 
 API design : should be stateless RESTful API - each request contain all info necessary to process certain request, should not remember previous requests; fat model , thin controller
 
+Feature: Password encryption using statless(The server does not store any state about the client session on the server between requests. ) JWT autentication is to store user's log-in state on the server using sessions
+
 MVC framework:
 
 Components of MVC:
@@ -50,6 +52,11 @@ Structure: In most setups, ushuaren_db might not be a separate component but rat
     - npm install validator
 
     - npm i ndb --global -dev-save    (by google node debuger tool , add in server.js debug line and run npm i ndb --global -dev-save )
+
+## password authentication
+
+    -npm i bcryptjs  (password encryption algo for js)
+    -npm i jsonwebtoken
 
 Q & A:
 HOW TO KNOW WHICH COLLECTION SHOULD MONGODB WRITE TO?
