@@ -6,6 +6,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const category = require('./routes/categoryRouter');
+const user = require('./routes/userRouter');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(express.json()); //for post request to work properly
 
 //3) ROUTES (mount the routers. moved to routes folder, mounted to 'categroy' routes)
 app.use('/api/v1/category', category);
+app.use('/api/v1/user', user);
 
 //4) START SERVER (moved to server.js file)
 

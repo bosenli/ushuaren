@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const Address = require('./addressModel'); // Assuming you have an Address model as discussed
 
+const bcrypt = require('bcrypt');
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -25,23 +27,38 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide a password'],
     minlength: 8,
   },
-  passwordConfrim: {
+  passwordConfirm: {
     type: String,
-    required: [true, 'Please  confirm your password'],
-    default: null,
+    required: [true, 'Please confirm your password'],
+    validate: {
+      //validate property; THIS IS ONLY WORK ON SAVE OR INITAL CREATE, NOT UPDATE, SO UPDATE ALSO NEED TO USE SAVE
+      validator: function (el) {
+        return el === this.password; //refer to password field
+      },
+      message: 'Passwords are not the same',
+    },
   },
   profileImage: {
     type: String,
-    validate: [
-      validator.isURL,
-      'Please provide a valid URL for the profile image',
-    ],
-    default: '',
+    default: null,
+    validate: {
+      validator: function (value) {
+        // Only validate the URL if the value is not null
+        return value == null || validator.isURL(value);
+      },
+      message: 'Please provide a valid URL for the profile image',
+    },
   },
-  address: {
+  //   address: {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'Address',
+  //     default: null, // Make address optional
+  //   },
+  createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Address',
-    default: null, // Make address optional
+    ref: 'User',
+    defult: null,
+    immutable: true, // Prevent changes to this field after creation
   },
   createdAt: {
     type: Date,
@@ -53,9 +70,14 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin', 'super', 'developer', 'guest'], // Including various roles
     default: 'user',
   },
-  // Other fields for authentication like password, etc., could be added here
 });
-
+//encrypt password with bcrypt
+userSchema.pre('save', async function (next) {
+  //only run this function if password was actually modified
+  if (!this.isModified('password')) return next(); //password not modified, call next middleware
+  this.password = await bcrypt.hash(this.password, 12); // 12 is cost parameter, more cpu instensive, regular is 10. salting the password
+  this.passwordConfirm = undefined; //delete the confirm password, required for input but not required to be persisted into db
+}); //pre save to db, manipulate password to be hashed
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
