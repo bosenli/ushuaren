@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const Address = require('./addressModel'); // Assuming you have an Address model as discussed
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -18,7 +18,13 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    validate: [validator.isMobilePhone, 'Please provide a valid phone number'],
+    validate: {
+      validator: function (value) {
+        // Only validate the URL if the value is not null
+        return value == null || validator.isMobilePhone(value);
+      },
+      message: 'Please provide a valid phone number ',
+    },
     default: null, // Phone is optional but if provided, must be valid
   },
   password: {
@@ -26,6 +32,7 @@ const userSchema = new mongoose.Schema({
     default: null,
     required: [true, 'Please provide a password'],
     minlength: 8,
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -38,6 +45,7 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same',
     },
   },
+  passwordChangedAt: Date,
   profileImage: {
     type: String,
     default: null,
@@ -77,7 +85,27 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next(); //password not modified, call next middleware
   this.password = await bcrypt.hash(this.password, 12); // 12 is cost parameter, more cpu instensive, regular is 10. salting the password
   this.passwordConfirm = undefined; //delete the confirm password, required for input but not required to be persisted into db
+  next();
 }); //pre save to db, manipulate password to be hashed
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+//implementing password change before token expired or stolen
+userSchema.methods.changePasswordAfter = async function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return JWTTimestamp < changedTimestamp; // 100 < 200
+  }
+  //this refers current document, false means not changed
+  return false;
+};
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

@@ -1,6 +1,7 @@
 const express = require('express');
 const categoryController = require('./../controllers/categoryController');
 const categoryRouter = express.Router();
+const authController = require('./../controllers/authController');
 //middleware
 // categoryRouter.param('id', (req, res, next, val) => {
 //   console.log(`id is ${val}`);
@@ -20,11 +21,13 @@ categoryRouter
   .route('/category-stats')
   .get(categoryController.getCategoryStats);
 
-categoryRouter.route('/monthly-plan/:year').get(categoryController.getMonthlyPlan)
+categoryRouter
+  .route('/monthly-plan/:year')
+  .get(categoryController.getMonthlyPlan);
 
 categoryRouter
   .route('/')
-  .get(categoryController.getAllCategories)
+  .get(authController.protect, categoryController.getAllCategories)
   .post(categoryController.createCategory);
 
 categoryRouter

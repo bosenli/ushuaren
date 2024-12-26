@@ -11,10 +11,18 @@ const user = require('./routes/userRouter');
 const app = express();
 
 // FIRST MIDDLEWARE, 顺序重要 ， 用来处理response添油加醋
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.use(express.json()); //for post request to work properly
 
+// Test middleware
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  console.log(req.headers);
+  next();
+});
 //app.use((req,res, next) =>{
 
 // })

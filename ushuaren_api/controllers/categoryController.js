@@ -1,8 +1,8 @@
 const Category = require('./../models/categoryModel');
 const APIFeatures = require('./../utils/apifeatures');
+const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
-const catchAsync = require('./../utils/catchAsync');
 //EXPORTS ALL HANDLERS FOR ROUTES which is to categoryRouter
 // exports.checkID = (req, res, next, val) => {
 //   console.log(`id in controller ${val}`);
@@ -29,7 +29,7 @@ exports.getAllCategories = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
   const categories = await features.query;
-
+  // console.log('Sending response for getAllCategories');
   res.status(200).json({
     status: 'sccuess',
     results: categories.length,
