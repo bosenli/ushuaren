@@ -4,14 +4,14 @@ const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  //   const features = new APIFeatures(User.find(), req.query)
-  //     .filter()
-  //     .sort()
-  //     .limitFields()
-  //     .paginate();
-  //   const users = await features.query;
+//   const features = new APIFeatures(User.find(), req.query)
+//     .filter()
+//     .sort()
+//     .limitFields()
+//     .paginate();
+//   const users = await features.query;
 
-  const users = await User.find();
+const users= await User.find()
 
   res.status(200).json({
     status: 'sccuess',
@@ -21,6 +21,13 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// exports.getAllUsers = (req, res) => {
+//   res.status(500).json({
+//     status: 'error',
+//     message: 'This route is not yet defined!',
+//   });
+// };
 
 //POST METHOD : create new
 exports.createUser = catchAsync(async (req, res, next) => {

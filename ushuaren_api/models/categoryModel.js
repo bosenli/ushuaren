@@ -86,10 +86,10 @@ categorySchema.pre('save', function (next) {
   next(); //next middleware
 });
 
-categorySchema.post('save', function (doc, next) {
-  console.log(doc);
-  next();
-});
+// categorySchema.post('save', function (doc, next) {
+//   console.log(doc);
+//   next();
+// });
 //QUERY MIDDLEWARE: middleware that is gonna run before find query is executed !!add to model
 categorySchema.pre(/^find/, function (next) {
   //processing all strings start with find: find, findOne

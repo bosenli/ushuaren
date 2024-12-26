@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const Address = require('./addressModel'); // Assuming you have an Address model as discussed
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -45,6 +45,7 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same',
     },
   },
+  passwordChangedAt: Date,
   profileImage: {
     type: String,
     default: null,
@@ -93,6 +94,18 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+//implementing password change before token expired or stolen
+userSchema.methods.changePasswordAfter = async function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return JWTTimestamp < changedTimestamp; // 100 < 200
+  }
+  //this refers current document, false means not changed
+  return false;
+};
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
