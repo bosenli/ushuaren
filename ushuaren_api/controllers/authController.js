@@ -21,6 +21,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
+    role: req.body.role,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
@@ -78,7 +79,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //2) Verfication: Validate token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
+  //console.log(decoded);
   //3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
@@ -87,12 +88,41 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
   //4) Check if user chenage password after the JWT token was issued-in model
-  if (currentUser.changesPasswordAfter(decoded.iat)) {
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
-      new AppError('User recently changed password! please log in again', 401)
+      new AppError('User recently changed password! Please log in again.', 401)
     );
   }
   req.user = currentUser;
 
   next(); //if all goes all, access to protected route
 });
+
+//categoryRouter restrict to  middleware, no arugment pass in into middleware, wrapper function, and return middle ware function
+exports.restrictTo = (...roles) => {
+  //...roles is rest parameter syntax, array of all argument specify
+  //return middle ware function itself , this function will access the roles because there is closure, roles is an array
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403)
+      );
+    }
+    next();
+  };
+};
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  //1) Get user based on Posted email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with email address', 404));
+  }
+
+  //2) Generate the random rest token
+  const resetToken = user.createPasswordRestToken();
+  await user.save();
+  //3) send it to user's email
+});
+
+exports.resetPassword = (req, res, next) => {};

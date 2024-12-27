@@ -1,4 +1,5 @@
 const express = require('express');
+
 const categoryController = require('./../controllers/categoryController');
 const categoryRouter = express.Router();
 const authController = require('./../controllers/authController');
@@ -34,6 +35,10 @@ categoryRouter
   .route('/:id')
   .get(categoryController.getCategoriesById)
   .patch(categoryController.updateCategories)
-  .delete(categoryController.deleteCategories); //can be chained multiple middleware
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin', 'super'),
+    categoryController.deleteCategories
+  ); //can be chained multiple middleware
 
 module.exports = categoryRouter; //export the whole thing
