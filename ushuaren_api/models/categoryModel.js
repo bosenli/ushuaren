@@ -117,7 +117,7 @@ categorySchema.pre('aggregate', function (next) {
   }); //unshift to insert start of the array
 
   //“THIS” POINTS TO AGGREGATION OBJECT
-  console.log(this);
+  //console.log(this);
   next();
 });
 
