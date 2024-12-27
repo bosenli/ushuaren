@@ -58,6 +58,11 @@ Structure: In most setups, ushuaren_db might not be a separate component but rat
     -npm i bcryptjs  (password encryption algo for js)
     -npm i jsonwebtoken
 
+## sending reset password email to user
+
+    -npm i nodemailer
+    - external sign up: mailtrap
+
 Q & A:
 HOW TO KNOW WHICH COLLECTION SHOULD MONGODB WRITE TO?
 The line mongoose.model('Category', categorySchema) instructs Mongoose to create a model named Category which will interact with a MongoDB collection named categories. Mongoose automatically looks for the plural, lowercase form of your model name by default. Thus Category becomes categories.
